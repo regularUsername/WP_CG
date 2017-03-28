@@ -65,7 +65,7 @@ public class Exercise1 extends Scene {
 //        getRoot().addChild(cubeRotation);
 
         // Cylinder test
-        CylinderNode cylinderNode = new CylinderNode(0.5,1,10);
+        CylinderNode cylinderNode = new CylinderNode(0.5,1,16);
         getRoot().addChild(cylinderNode);
 
         // Plane

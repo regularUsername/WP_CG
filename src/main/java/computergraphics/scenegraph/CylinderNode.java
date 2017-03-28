@@ -24,42 +24,75 @@ public class CylinderNode extends LeafNode {
         this.resolution = resolution;
         this.length = length;
         vbo = new VertexBufferObject();
-        createVbo();
+        createVboTriangleStrips();
     }
 
-    private void createVbo() {
-        List<RenderVertex> renderVertices = new ArrayList<RenderVertex>();
+    private void createVboTriangleStrips() {
+        List<RenderVertex> renderVertices = new ArrayList<>();
 
-        // TODO hier den zylinder erstellen
-        float dTheta = (float) (Math.PI / resolution);
-        float dPhi = (float) (Math.PI * 2.0 / resolution);
-        int i = 1;
-        for (int j = 0; j < resolution; j++) {
-            Vector p0 = evaluateSpherePoint(i * dTheta, j * dPhi);
-            Vector p1 = evaluateSpherePoint(i * dTheta, (j + 1) * dPhi);
-            Vector p2 = evaluateSpherePoint((i + 1) * dTheta, (j + 1) * dPhi);
-            Vector p3 = evaluateSpherePoint((i + 1) * dTheta, j * dPhi);
-            Vector normal = evaluateSpherePoint((i + 0.5f) * dTheta,
-                    (j + 0.5f) * dPhi).getNormalized();
+        Vector normal = new Vector(0.0, -1.0, 0.0);
+        for (int i = 0; i < resolution; i++) {
+            double t0 = ((double) i) * 2.0 * Math.PI / resolution;
+            double t1 = ((double) i + 1) * 2.0 * Math.PI / resolution;
 
-            AddSideVertices(renderVertices, p0, p1, p2, p3, normal, color);
+            double x0 = radius * Math.cos(t0);
+            double y0 = radius * Math.sin(t0);
+            double x1 = radius * Math.cos(t1);
+            double y1 = radius * Math.sin(t1);
+
+            // TODO wie macht man hier die normal vektoren ?
+
+            // TODO degenerate triangles ? um strips zu trennen
+
+            // abwechselnd oben und unten anfangen um zylinder in einem zusammenhängendem triangle strip zu rendern
+            double l = i % 2 == 0 ? length : -length;
+
+            renderVertices.add(new RenderVertex(new Vector(0.0, 0.0, l), normal, color));
+            renderVertices.add(new RenderVertex(new Vector(x0, y0, l), normal, color));
+            renderVertices.add(new RenderVertex(new Vector(x1, y1, l), normal, color));
+
+            renderVertices.add(new RenderVertex(new Vector(x0, y0, -l), normal, color));
+            renderVertices.add(new RenderVertex(new Vector(x1, y1, -l), normal, color));
+            if (i == resolution - 1) {
+                renderVertices.add(new RenderVertex(new Vector(0.0, 0.0, -l), normal, color));
+            }
+
         }
-        vbo.Setup(renderVertices, GL2.GL_QUADS);
+
+        vbo.Setup(renderVertices, GL2.GL_TRIANGLE_STRIP);
     }
 
-    private void AddSideVertices(List<RenderVertex> renderVertices, Vector p0,
-                                 Vector p1, Vector p2, Vector p3, Vector normal, Vector color) {
-        renderVertices.add(new RenderVertex(p3, normal, color));
-        renderVertices.add(new RenderVertex(p2, normal, color));
-        renderVertices.add(new RenderVertex(p1, normal, color));
-        renderVertices.add(new RenderVertex(p0, normal, color));
-    }
+    private void createVboTriangles() {
+        List<RenderVertex> renderVertices = new ArrayList<>();
 
-    private Vector evaluateSpherePoint(float theta, float phi) {
-        float x = (float) (radius * Math.sin(theta) * Math.cos(phi));
-        float y = (float) (radius * Math.sin(theta) * Math.sin(phi));
-        float z = (float) (radius * Math.cos(theta));
-        return new Vector(x, y, z);
+        Vector normal = new Vector(0.0, -1.0, 0.0);
+        for (int i = 0; i < resolution; i++) {
+            double t0 = ((double) i) * 2.0 * Math.PI / resolution;
+            double t1 = ((double) i + 1) * 2.0 * Math.PI / resolution;
+
+            double x0 = radius * Math.cos(t0);
+            double y0 = radius * Math.sin(t0);
+            double x1 = radius * Math.cos(t1);
+            double y1 = radius * Math.sin(t1);
+
+            // TODO wie macht man hier die normal vektoren ?
+            renderVertices.add(new RenderVertex(new Vector(0.0, 0.0, length), normal, color));
+            renderVertices.add(new RenderVertex(new Vector(x0, y0, length), normal, color));
+            renderVertices.add(new RenderVertex(new Vector(x1, y1, length), normal, color));
+
+            renderVertices.add(new RenderVertex(new Vector(x1, y1, length), normal, color));
+            renderVertices.add(new RenderVertex(new Vector(x0, y0, length), normal, color));
+            renderVertices.add(new RenderVertex(new Vector(x0, y0, -length), normal, color));
+
+            renderVertices.add(new RenderVertex(new Vector(x1, y1, length), normal, color));
+            renderVertices.add(new RenderVertex(new Vector(x0, y0, -length), normal, color));
+            renderVertices.add(new RenderVertex(new Vector(x1, y1, -length), normal, color));
+
+            renderVertices.add(new RenderVertex(new Vector(x0, y0, -length), normal, color));
+            renderVertices.add(new RenderVertex(new Vector(0.0, 0.0, -length), normal, color));
+            renderVertices.add(new RenderVertex(new Vector(x1, y1, -length), normal, color));
+        }
+        vbo.Setup(renderVertices, GL2.GL_TRIANGLES);
     }
 
     @Override
