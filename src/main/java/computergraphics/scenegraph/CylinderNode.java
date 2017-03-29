@@ -27,6 +27,16 @@ public class CylinderNode extends LeafNode {
         createVboTriangles();
     }
 
+    public CylinderNode(double radius, double length, int resolution, Vector color) {
+        this.radius = radius;
+        this.resolution = resolution;
+        this.length = length;
+        this.color = color;
+        vbo = new VertexBufferObject();
+        createVboTriangles();
+    }
+
+    
     private void createVboTriangleStrips() {
         List<RenderVertex> renderVertices = new ArrayList<>();
 
@@ -44,7 +54,7 @@ public class CylinderNode extends LeafNode {
 
             // TODO degenerate triangles ? um strips zu trennen
 
-            // abwechselnd oben und unten anfangen um zylinder in einem zusammenh√§ngendem triangle strip zu rendern
+            // abwechselnd oben und unten anfangen um zylinder in einem zusammenh‰ngendem triangle strip zu rendern
             double l = i % 2 == 0 ? length : -length;
 
             renderVertices.add(new RenderVertex(new Vector(0.0, 0.0, l), normal, color));
