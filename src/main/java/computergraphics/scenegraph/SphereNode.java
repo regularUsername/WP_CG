@@ -49,6 +49,14 @@ public class SphereNode extends LeafNode {
     vbo = new VertexBufferObject();
     createVbo();
   }
+  
+  public SphereNode(double radius, int resolution,Vector color) {
+	    this.radius = radius;
+	    this.resolution = resolution;
+	    this.color = color;
+	    vbo = new VertexBufferObject();
+	    createVbo();
+	  }
 
   private void createVbo() {
     List<RenderVertex> renderVertices = new ArrayList<RenderVertex>();

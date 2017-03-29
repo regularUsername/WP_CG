@@ -64,9 +64,29 @@ public class Exercise1 extends Scene {
 //        cubeRotation.addChild(cubeNode1);
 //        getRoot().addChild(cubeRotation);
 
-        // Cylinder test
-        CylinderNode cylinderNode = new CylinderNode(0.5,1,16);
-        getRoot().addChild(cylinderNode);
+        // Tree
+
+
+        
+        CylinderNode trunk = new CylinderNode(0.2,0.5,16);
+        ScaleNode treeScale = new ScaleNode(new Vector(0.5,0.5,0.5));
+        treeScale.addChild(trunk);
+        SphereNode crown = new SphereNode(0.6, 20, new Vector(0.25, 0.75, 0.25, 1));
+        TranslationNode crownTranslation = new TranslationNode(new Vector(0.0,0.0,0.6));
+        crownTranslation.addChild(crown);
+        treeScale.addChild(crownTranslation);
+        
+        for (int i = 0; i < 5;  i++) {
+			Double x =  (Math.random()*10)-5;
+			Double y =  (Math.random()*10)-5;
+			
+			TranslationNode treeTranslation = new TranslationNode(new Vector(x,y,-0.2));
+			treeTranslation.addChild(treeScale);
+			getRoot().addChild(treeTranslation);
+			
+		}
+        
+        // Tree end
 
         // Plane
         TranslationNode planeTranslation = new TranslationNode(new Vector(0,0,-0.5));

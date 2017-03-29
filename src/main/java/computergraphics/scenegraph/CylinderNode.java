@@ -17,14 +17,14 @@ public class CylinderNode extends LeafNode {
 
     private VertexBufferObject vbo;
 
-    private Vector color = new Vector(0.75, 0.25, 0.25, 1);
+    private Vector color = new Vector(0.69, 0.30, 0.18, 1);
 
     public CylinderNode(double radius, double length, int resolution) {
         this.radius = radius;
         this.resolution = resolution;
         this.length = length;
         vbo = new VertexBufferObject();
-        createVboTriangleStrips();
+        createVboTriangles();
     }
 
     private void createVboTriangleStrips() {
@@ -65,7 +65,8 @@ public class CylinderNode extends LeafNode {
     private void createVboTriangles() {
         List<RenderVertex> renderVertices = new ArrayList<>();
 
-        Vector normal = new Vector(0.0, -1.0, 0.0);
+        Vector nTop = new Vector(0.0, -1.0, 0.0);
+        Vector nBot = new Vector(0.0, 1.0,0.0);
         for (int i = 0; i < resolution; i++) {
             double t0 = ((double) i) * 2.0 * Math.PI / resolution;
             double t1 = ((double) i + 1) * 2.0 * Math.PI / resolution;
@@ -75,10 +76,13 @@ public class CylinderNode extends LeafNode {
             double x1 = radius * Math.cos(t1);
             double y1 = radius * Math.sin(t1);
 
+            double tn = ((double) i + 0.5) * 2.0 * Math.PI / resolution;
+            Vector normal = new Vector(Math.cos(tn),Math.sin(tn), 0.0);
+            
             // TODO wie macht man hier die normal vektoren ?
-            renderVertices.add(new RenderVertex(new Vector(0.0, 0.0, length), normal, color));
-            renderVertices.add(new RenderVertex(new Vector(x0, y0, length), normal, color));
-            renderVertices.add(new RenderVertex(new Vector(x1, y1, length), normal, color));
+            renderVertices.add(new RenderVertex(new Vector(0.0, 0.0, length), nTop, color));
+            renderVertices.add(new RenderVertex(new Vector(x0, y0, length), nTop, color));
+            renderVertices.add(new RenderVertex(new Vector(x1, y1, length), nTop, color));
 
             renderVertices.add(new RenderVertex(new Vector(x1, y1, length), normal, color));
             renderVertices.add(new RenderVertex(new Vector(x0, y0, length), normal, color));
@@ -88,9 +92,9 @@ public class CylinderNode extends LeafNode {
             renderVertices.add(new RenderVertex(new Vector(x0, y0, -length), normal, color));
             renderVertices.add(new RenderVertex(new Vector(x1, y1, -length), normal, color));
 
-            renderVertices.add(new RenderVertex(new Vector(x0, y0, -length), normal, color));
-            renderVertices.add(new RenderVertex(new Vector(0.0, 0.0, -length), normal, color));
-            renderVertices.add(new RenderVertex(new Vector(x1, y1, -length), normal, color));
+            renderVertices.add(new RenderVertex(new Vector(x0, y0, -length), nBot, color));
+            renderVertices.add(new RenderVertex(new Vector(0.0, 0.0, -length), nBot, color));
+            renderVertices.add(new RenderVertex(new Vector(x1, y1, -length), nBot, color));
         }
         vbo.Setup(renderVertices, GL2.GL_TRIANGLES);
     }
