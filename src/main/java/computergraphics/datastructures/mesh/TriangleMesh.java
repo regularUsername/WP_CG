@@ -70,7 +70,18 @@ public class TriangleMesh implements ITriangleMesh {
 
     @Override
     public void computeTriangleNormals() {
-        // kreuzprodukt ?
+        //
+        for (Triangle triangel:triangleList){
+
+            //FIXME das hier geht noch nicht
+            Vector p0 = vertexList.get(triangel.getVertexIndex(0)).getPosition();
+            Vector p1 = vertexList.get(triangel.getVertexIndex(1)).getPosition();
+            Vector p2 = vertexList.get(triangel.getVertexIndex(2)).getPosition();
+
+            Vector n = p0.cross(p1).add(p1.cross(p2)).add(p2.cross(p0));
+            triangel.setNormal(n);
+
+        }
     }
 
     @Override
