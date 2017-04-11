@@ -6,14 +6,13 @@ import computergraphics.rendering.Texture;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by dimhof on 07.04.17.
- */
+
 public class TriangleMesh implements ITriangleMesh {
 
-    List<Vertex> vertexList;
-    List<Triangle> triangleList;
-    Vector color;
+    private List<Vertex> vertexList;
+    private List<Triangle> triangleList;
+    private Vector color;
+
     public TriangleMesh(Vector color) {
         vertexList = new ArrayList<>();
         triangleList = new ArrayList<>();
@@ -24,7 +23,7 @@ public class TriangleMesh implements ITriangleMesh {
     public int addVertex(Vector position) {
         vertexList.add(new Vertex(position));
 
-        return vertexList.size()-1;
+        return vertexList.size() - 1;
     }
 
     @Override
@@ -39,7 +38,7 @@ public class TriangleMesh implements ITriangleMesh {
 
     @Override
     public void addTriangle(int vertexIndex1, int vertexIndex2, int vertexIndex3) {
-        triangleList.add(new Triangle(vertexIndex1,vertexIndex2,vertexIndex3));
+        triangleList.add(new Triangle(vertexIndex1, vertexIndex2, vertexIndex3));
     }
 
     @Override
@@ -49,7 +48,7 @@ public class TriangleMesh implements ITriangleMesh {
 
     @Override
     public void addTriangle(int vertexIndex1, int vertexIndex2, int vertexIndex3, int texCoordIndex1, int texCoordIndex2, int texCoordIndex3) {
-        triangleList.add(new Triangle(vertexIndex1,vertexIndex2,vertexIndex3,texCoordIndex1,texCoordIndex2,texCoordIndex3));
+        triangleList.add(new Triangle(vertexIndex1, vertexIndex2, vertexIndex3, texCoordIndex1, texCoordIndex2, texCoordIndex3));
     }
 
     @Override
@@ -71,7 +70,7 @@ public class TriangleMesh implements ITriangleMesh {
     @Override
     public void computeTriangleNormals() {
         //
-        for (Triangle triangle:triangleList){
+        for (Triangle triangle : triangleList) {
 
             Vector p0 = vertexList.get(triangle.getVertexIndex(0)).getPosition();
             Vector p1 = vertexList.get(triangle.getVertexIndex(1)).getPosition();

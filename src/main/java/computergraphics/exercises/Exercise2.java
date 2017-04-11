@@ -7,7 +7,6 @@ import computergraphics.math.Vector;
 import computergraphics.misc.Scene;
 import computergraphics.rendering.Shader;
 import computergraphics.scenegraph.*;
-import javafx.scene.transform.Scale;
 
 import java.awt.event.KeyEvent;
 
@@ -40,12 +39,15 @@ public class Exercise2 extends Scene {
         planeTranslation.addChild(planeNode);
         getRoot().addChild(planeTranslation);
 
+        // TriangleMesh
         ObjReader objReader = new ObjReader();
         TriangleMesh triangleMesh = new TriangleMesh(new Vector(1,0,0,1));
         objReader.read("meshes/bunny.obj",triangleMesh);
-        TriangleMeshNode triangleMeshNode = new TriangleMeshNode(triangleMesh);
+        TriangleMeshNode triangleMeshNode = new TriangleMeshNode(triangleMesh,true,0.01);
+
         ScaleNode scaleNode = new ScaleNode(new Vector(10,10,10));
         scaleNode.addChild(triangleMeshNode);
+
         RotationNode rotationNode = new RotationNode(new Vector(1,0,0),90.0);
         rotationNode.addChild(scaleNode);
         getRoot().addChild(rotationNode);

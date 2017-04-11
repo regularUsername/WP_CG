@@ -9,12 +9,12 @@ public class RotationNode extends InnerNode {
     private Matrix rotation;
     private final Vector axis;
 
-    public RotationNode(Vector axis, Double angle) {
+    public RotationNode(Vector axis, double angle) {
         this.axis = axis;
         this.rotation = Matrix.createRotationMatrix4GL(axis, Math.toRadians(angle));
     }
 
-    public void setAngle(Double angle) {
+    public void setAngle(double angle) {
         this.rotation = Matrix.createRotationMatrix4GL(axis, Math.toRadians(angle));
     }
 

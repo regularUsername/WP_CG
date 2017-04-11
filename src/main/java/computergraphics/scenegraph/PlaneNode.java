@@ -29,7 +29,6 @@ public class PlaneNode extends LeafNode {
         renderVertices.add(new RenderVertex(p3, normal, color));
 
         vbo.Setup(renderVertices, GL2.GL_QUADS);
-        // GL_QUADS ist deprecated stattdessen GL_TRIANGLE_STRIP benutzen und p2 und p3 in der reihenfolge tauschen
 
     }
 
