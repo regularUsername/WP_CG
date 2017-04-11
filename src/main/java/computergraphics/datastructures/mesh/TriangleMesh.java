@@ -71,15 +71,20 @@ public class TriangleMesh implements ITriangleMesh {
     @Override
     public void computeTriangleNormals() {
         //
-        for (Triangle triangel:triangleList){
+        for (Triangle triangle:triangleList){
 
-            //FIXME das hier geht noch nicht
-            Vector p0 = vertexList.get(triangel.getVertexIndex(0)).getPosition();
-            Vector p1 = vertexList.get(triangel.getVertexIndex(1)).getPosition();
-            Vector p2 = vertexList.get(triangel.getVertexIndex(2)).getPosition();
+            Vector p0 = vertexList.get(triangle.getVertexIndex(0)).getPosition();
+            Vector p1 = vertexList.get(triangle.getVertexIndex(1)).getPosition();
+            Vector p2 = vertexList.get(triangle.getVertexIndex(2)).getPosition();
 
-            Vector n = p0.cross(p1).add(p1.cross(p2)).add(p2.cross(p0));
-            triangel.setNormal(n);
+            Vector a = p0.cross(p1);
+            Vector b = p1.cross(p2);
+            Vector c = p2.cross(p0);
+            Vector n = a.add(b).add(c);
+
+            n.normalize();
+
+            triangle.setNormal(n);
 
         }
     }
