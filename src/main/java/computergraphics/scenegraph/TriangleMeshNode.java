@@ -111,14 +111,20 @@ public class TriangleMeshNode extends LeafNode {
     @Override
     public void drawGL(GL2 gl, RenderMode mode, Matrix modelMatrix) {
         if (mode == RenderMode.REGULAR) {
+            Texture texture = triangleMesh.getTexture();
+            if(texture != null){
+            	if (texture.isLoaded()){
+            		texture.bind(gl);
+            	} else {
+            		texture.load(gl);
+            	}
+            }
+        	
             vbo.draw(gl);
             if (showNormals) {
                 vbo_normals.draw(gl);
             }
-            Texture texture = triangleMesh.getTexture();
-            if(texture != null){
-                texture.load(gl);
-            }
+
         }
     }
 }

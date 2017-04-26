@@ -36,25 +36,30 @@ public class Exercise3 extends Scene {
 
 
         // Square
-//        ObjReader objReader = new ObjReader();
-//        TriangleMesh square = new TriangleMesh(new Vector(1,0,0,1));
-////        triangleMesh.setTexture(new Texture("textures/lego.png"));
-////        objReader.read("meshes/square.obj",triangleMesh);
-//        objReader.read("meshes/square.obj","meshes/square.mtl",square);
-//        TriangleMeshNode squareNode = new TriangleMeshNode(square,true,0.01);
-//                getRoot().addChild(squareNode);
+        ObjReader objReader = new ObjReader();
+        TriangleMesh square = new TriangleMesh(new Vector(1,0,0,1));
+//        triangleMesh.setTexture(new Texture("textures/lego.png"));
+//        objReader.read("meshes/square.obj",triangleMesh);
+        objReader.read("meshes/square.obj","meshes/square.mtl",square);
+        TriangleMeshNode squareNode = new TriangleMeshNode(square,true,0.01);
+                getRoot().addChild(squareNode);
 
         // Box
-        ObjReader objReader = new ObjReader();
+        ObjReader objReader2 = new ObjReader();
         TriangleMesh box = new TriangleMesh(new Vector(0,1,0,1));
-        objReader.read("meshes/box.obj", box);
+        objReader2.read("meshes/box.obj", box);
         box.setTexture(new Texture("textures/box.jpg"));
         TriangleMeshNode boxNode = new TriangleMeshNode(box,true,0.01);
 
         TranslationNode boxTranslation = new TranslationNode(new Vector(1.2,0,0));
+        
+        
         boxTranslation.addChild(boxNode);
+        
+        RotationNode boxRotation = new RotationNode(new Vector(1,0,0), -90);
+        boxRotation.addChild(boxTranslation);
 
-        getRoot().addChild(boxTranslation);
+        getRoot().addChild(boxRotation);
     }
     @Override
     public void keyPressed(KeyEvent keyEvent) {
