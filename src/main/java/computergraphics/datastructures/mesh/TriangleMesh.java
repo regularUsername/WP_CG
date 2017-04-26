@@ -11,11 +11,14 @@ public class TriangleMesh implements ITriangleMesh {
 
     private List<Vertex> vertexList;
     private List<Triangle> triangleList;
+    private List<Vector> textureCoordinates;
     private Vector color;
+    private Texture texture = null;
 
     public TriangleMesh(Vector color) {
         vertexList = new ArrayList<>();
         triangleList = new ArrayList<>();
+        textureCoordinates = new ArrayList<>();
         this.color = color;
     }
 
@@ -100,22 +103,22 @@ public class TriangleMesh implements ITriangleMesh {
 
     @Override
     public Vector getTextureCoordinate(int index) {
-        return null;
+        return textureCoordinates.get(index);
     }
 
     @Override
     public void addTextureCoordinate(Vector t) {
-
+        textureCoordinates.add(t);
     }
 
     @Override
     public void setTexture(Texture texture) {
-
+        this.texture = texture;
     }
 
     @Override
     public Texture getTexture() {
-        return null;
+        return texture;
     }
 
     @Override

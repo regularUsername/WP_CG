@@ -18,6 +18,7 @@ import java.io.InputStreamReader;
 
 import computergraphics.math.Vector;
 import computergraphics.misc.AssetPath;
+import computergraphics.rendering.Texture;
 
 /**
  * Read OBJ file and fill triangle mesh with the content.
@@ -71,8 +72,76 @@ public class ObjReader {
     System.out.println("OBJ file " + filename + " with "
         + mesh.getNumberOfVertices() + " vertices and "
         + mesh.getNumberOfTriangles() + " triangles successfully read.");
+
+
     return true;
   }
+
+    public boolean read(final String objFilename,final String mtlFilename, ITriangleMesh mesh){
+        if (!read(objFilename, mesh)){
+            return false;
+        }
+
+        String path = AssetPath.getPathToAsset(mtlFilename);
+        if( !(new File(path).exists())){
+            System.out.println("Material file " + mtlFilename + " with path " + path + " cannot be found.");
+            return false;
+        }
+
+        InputStream is;
+        String textureFilename = null;
+        String materialName = null;
+        Vector surfaceColor = null;
+        try {
+            is = new FileInputStream(path);
+            DataInputStream in = new DataInputStream(is);
+            BufferedReader br = new BufferedReader(new InputStreamReader(in));
+            String strLine;
+            while ((strLine = br.readLine()) != null) {
+                String line = strLine.trim();
+                String operator = getOperator(line);
+                if (operator.equals("map_Kd")) {
+                    String[] texFilenameCommand = line.split(" ");
+                    if (texFilenameCommand.length == 2) {
+                        textureFilename = texFilenameCommand[1];
+                    }
+                } else if (operator.equals("Kd")) {
+                    String[] allColors = line.split("\\s+");
+                    if(allColors.length==4){
+                        surfaceColor = new Vector(getFloatValue(allColors[1]),getFloatValue(allColors[1]),getFloatValue(allColors[1]),1);
+                    }
+                }else if (operator.equals("newmtl")) {
+                    String[] materialNameCommand = line.split(" ");
+                    if (materialNameCommand.length == 2) {
+                        materialName = materialNameCommand[1];
+                    }
+                }
+            }
+            in.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("Error reading material file " + mtlFilename);
+            return false;
+        } catch (IOException e) {
+            System.out.println("Error reading material file " + mtlFilename);
+            return false;
+        }
+
+        if(textureFilename!=null) {
+            System.out.println("Texture filename: " + textureFilename);
+            mesh.setTexture(new Texture(textureFilename));
+
+        }
+        if (materialName!= null) {
+            System.out.println("Material name: " + materialName);
+        }
+        if(surfaceColor != null) {
+            System.out.println("Surface Color: " + surfaceColor);
+            mesh.setColor(surfaceColor);
+        }
+
+
+        return true;
+    }
 
   /**
    * Einlesen einer Zeile aus der OBJ-Datei.

@@ -6,6 +6,7 @@ import computergraphics.datastructures.mesh.TriangleMesh;
 import computergraphics.math.Matrix;
 import computergraphics.math.Vector;
 import computergraphics.rendering.RenderVertex;
+import computergraphics.rendering.Texture;
 import computergraphics.rendering.VertexBufferObject;
 
 import java.util.ArrayList;
@@ -16,11 +17,14 @@ public class TriangleMeshNode extends LeafNode {
     private VertexBufferObject vbo_normals; // vbo zum darstellen der normalen als linien
     private boolean showNormals = false;
     private double normalScale = 0.1; // skalierung der länge der normalen
+    private TriangleMesh triangleMesh;
 
     public TriangleMeshNode(TriangleMesh triangleMesh) {
+        this.triangleMesh = triangleMesh;
+
         vbo = new VertexBufferObject();
 
-        createVbo(triangleMesh);
+        createVbo();
     }
 
     public TriangleMeshNode(TriangleMesh triangleMesh, Boolean showNormals) {
@@ -30,7 +34,7 @@ public class TriangleMeshNode extends LeafNode {
         vbo_normals = new VertexBufferObject();
 
         if (showNormals) {
-            createVboNormals(triangleMesh);
+            createVboNormals();
         }
     }
 
@@ -41,30 +45,47 @@ public class TriangleMeshNode extends LeafNode {
         vbo_normals = new VertexBufferObject();
 
         if (showNormals) {
-            createVboNormals(triangleMesh);
+            createVboNormals();
         }
     }
 
-    private void createVbo(TriangleMesh triangleMesh) {
+    private void createVbo() {
         List<RenderVertex> renderVertices = new ArrayList<>();
+
+        boolean texture = triangleMesh.getTexture() != null;
 
         for (int i = 0; i < triangleMesh.getNumberOfTriangles(); i++) {
             Triangle triangle = triangleMesh.getTriangle(i);
 
-            // Vektoren der vertices holen
-            Vector v0 = triangleMesh.getVertex(triangle.getVertexIndex(0)).getPosition();
-            Vector v1 = triangleMesh.getVertex(triangle.getVertexIndex(1)).getPosition();
-            Vector v2 = triangleMesh.getVertex(triangle.getVertexIndex(2)).getPosition();
+            int i0 = triangle.getVertexIndex(0);
+            int i1 = triangle.getVertexIndex(1);
+            int i2 = triangle.getVertexIndex(2);
 
-            renderVertices.add(new RenderVertex(v0, triangle.getNormal(), triangleMesh.getColor()));
-            renderVertices.add(new RenderVertex(v1, triangle.getNormal(), triangleMesh.getColor()));
-            renderVertices.add(new RenderVertex(v2, triangle.getNormal(), triangleMesh.getColor()));
+            int j0 = triangle.getTexCoordIndex(0);
+            int j1 = triangle.getTexCoordIndex(1);
+            int j2 = triangle.getTexCoordIndex(2);
+
+
+            // Vektoren der vertices holen
+            Vector v0 = triangleMesh.getVertex(i0).getPosition();
+            Vector v1 = triangleMesh.getVertex(i1).getPosition();
+            Vector v2 = triangleMesh.getVertex(i2).getPosition();
+
+            if (!texture) {
+                renderVertices.add(new RenderVertex(v0, triangle.getNormal(), triangleMesh.getColor()));
+                renderVertices.add(new RenderVertex(v1, triangle.getNormal(), triangleMesh.getColor()));
+                renderVertices.add(new RenderVertex(v2, triangle.getNormal(), triangleMesh.getColor()));
+            } else {
+                renderVertices.add(new RenderVertex(v0, triangle.getNormal(), triangleMesh.getColor(),triangleMesh.getTextureCoordinate(j0)));
+                renderVertices.add(new RenderVertex(v1, triangle.getNormal(), triangleMesh.getColor(),triangleMesh.getTextureCoordinate(j1)));
+                renderVertices.add(new RenderVertex(v2, triangle.getNormal(), triangleMesh.getColor(),triangleMesh.getTextureCoordinate(j2)));
+            }
         }
         vbo.Setup(renderVertices, GL2.GL_TRIANGLES);
     }
 
     // füllt das vertexbufferobject zum darstellen der normalen
-    private void createVboNormals(TriangleMesh triangleMesh) {
+    private void createVboNormals() {
         List<RenderVertex> renderLines = new ArrayList<>();
 
         Vector color = new Vector(0, 0, 1, 1);
@@ -93,6 +114,10 @@ public class TriangleMeshNode extends LeafNode {
             vbo.draw(gl);
             if (showNormals) {
                 vbo_normals.draw(gl);
+            }
+            Texture texture = triangleMesh.getTexture();
+            if(texture != null){
+                texture.load(gl);
             }
         }
     }
