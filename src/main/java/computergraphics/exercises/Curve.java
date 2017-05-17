@@ -13,6 +13,10 @@ private List<Vector> controlPoints;
 		controlPoints = new ArrayList<>();
 	}
 	
+	public Curve(List<Vector> controlPoints){
+		this.controlPoints = controlPoints;
+	}
+	
 	 
 		public void addcontrolPoints(Vector controlPoints){
 			controlPoints.add(controlPoints);		

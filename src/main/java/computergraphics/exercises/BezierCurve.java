@@ -2,29 +2,56 @@ package computergraphics.exercises;
 
 import computergraphics.math.Vector;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import computergraphics.math.MathHelpers;;
 
-public class BezierCurve extends Curve{
+public class BezierCurve{
+	
+	List<Vector> controlPoints;
+	
+	public BezierCurve(){
+		super();
+		controlPoints = new ArrayList<>();
+	}
+	
+//	public BezierCurve(List<Vector> controlPoints) {
+//		super(controlPoints);
+//	}
+	
+	public void addcontrolPoints(Vector controlPoints) {
+		controlPoints.add(controlPoints);
+	}
+	
+	public List<Vector> getControlPoints() {
+		return controlPoints;
+	}
+	
+	public int getDegree() {
+		return controlPoints.size() - 1;
+	}
 
-	@Override
 	public Vector getValue(double t) {
-		Vector result = new Vector(4);
+		Vector result = new Vector(3);
 		int size = getControlPoints().size();
 		for(int i = 0; i < size; i++){
 			Vector temp = getControlPoints().get(i);
-			temp = temp.multiply(MathHelpers.over(getDegree(), i) * Math.pow(t, i) * Math.pow(1.0 - t, getDegree()-i));
+//			temp = temp.multiply(MathHelpers.over(getDegree(), i) * Math.pow(t, i) * Math.pow(1.0 - t, getDegree()-i));
+			temp = temp.multiply(baseFunction(t, i,getDegree()));
 			result = result.add(temp);
 		}
 		
 		return result;
 	}
+	
+	public static double baseFunction(double t, int i, int degree){
+		return MathHelpers.over(degree, i) * Math.pow(t, i) * Math.pow(1.0 - t, degree-i);
+	}
 
-	@Override
 	public Vector calculateTangent(double t) {
 		
-		Vector vecTan = new Vector(4);
+		Vector vecTan = new Vector(3);
 		int size = getControlPoints().size();
 		List<Vector> controlPoints = getControlPoints();
 		
