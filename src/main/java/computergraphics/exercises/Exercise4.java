@@ -10,6 +10,8 @@ import computergraphics.scenegraph.SphereNode;
 import computergraphics.scenegraph.TranslationNode;
 import computergraphics.scenegraph.TriangleMeshNode;
 
+import java.awt.event.KeyEvent;
+
 public class Exercise4 extends Scene{
 
 	
@@ -70,7 +72,11 @@ public class Exercise4 extends Scene{
 
         
 	}
-	
+
+
+	@Override
+    public void keyPressed(KeyEvent keyEvent){}
+
 	/**
      * Program entry point.
      */
