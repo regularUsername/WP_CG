@@ -5,16 +5,15 @@ import com.jogamp.opengl.GL2;
 import computergraphics.math.Vector;
 import computergraphics.misc.Scene;
 import computergraphics.rendering.Shader;
-import computergraphics.scenegraph.INode;
-import computergraphics.scenegraph.SphereNode;
-import computergraphics.scenegraph.TranslationNode;
-import computergraphics.scenegraph.TriangleMeshNode;
+import computergraphics.scenegraph.*;
 
 import java.awt.event.KeyEvent;
 
 public class Exercise4 extends Scene{
 
-	
+
+    private TensorProductSurface tensorProductSurface;
+
     public Exercise4() {
 		super(100, Shader.ShaderMode.PHONG, INode.RenderMode.REGULAR);
 		// TODO Auto-generated constructor stub
@@ -24,6 +23,9 @@ public class Exercise4 extends Scene{
 	 * 
 	 */
 	private static final long serialVersionUID = -3701527599796171631L;
+
+	private double u,v;
+	private LineNode lineNode;
 
 	
 	@Override
@@ -66,7 +68,15 @@ public class Exercise4 extends Scene{
         grid[3][1] = new Vector(1,0,0);
         grid[3][2] = new Vector(2,0,0);
         grid[3][3] = new Vector(3,0,0);
-        TensorProductSurface tensorProductSurface = new TensorProductSurface(grid,3,3);
+        tensorProductSurface = new TensorProductSurface(grid,3,3);
+        u = 0.5;
+        v = 0.5;
+        Vector surfacePoint = tensorProductSurface.getValue(u,v);
+        Vector surfaceNormal = tensorProductSurface.getNormal(u,v);
+        System.out.println(surfacePoint+"   "+surfaceNormal);
+        lineNode = new LineNode(surfacePoint,surfacePoint.add(surfaceNormal));
+        getRoot().addChild(lineNode);
+
         TriangleMeshNode triangleMeshNode = new TriangleMeshNode(tensorProductSurface.getTriangleMesh(10));
         getRoot().addChild(triangleMeshNode);
 
@@ -75,7 +85,47 @@ public class Exercise4 extends Scene{
 
 
 	@Override
-    public void keyPressed(KeyEvent keyEvent){}
+    public void keyPressed(KeyEvent keyEvent){
+	    double d = 0.05;
+	    switch(keyEvent.getKeyChar()){
+            case 'a':
+                System.out.println("pressed u -"+d);
+                u-=d;
+                break;
+            case 's':
+                System.out.println("pressed v -"+d);
+                v-=d;
+                break;
+            case 'd':
+                System.out.println("pressed u +"+d);
+                u+=d;
+                break;
+            case 'w':
+                System.out.println("pressed v +"+d);
+                v+=d;
+                break;
+            default:
+                break;
+        }
+
+        if(v>1){
+	        v=1;
+        }
+        if(v<0){
+            v=0;
+        }
+        if(u>1){
+            u=1;
+        }
+        if(u<0){
+            u=0;
+        }
+
+        Vector surfacePoint = tensorProductSurface.getValue(u,v);
+        Vector surfaceNormal = tensorProductSurface.getNormal(u,v);
+        System.out.println(surfacePoint+"   "+surfaceNormal);
+        lineNode.setVecs(surfacePoint,surfacePoint.add(surfaceNormal));
+    }
 
 	/**
      * Program entry point.

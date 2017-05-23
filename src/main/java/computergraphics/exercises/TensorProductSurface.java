@@ -98,14 +98,16 @@ public class TensorProductSurface {
                 Vector tmp = getValue(((double) i) / steps, ((double) j) / steps);
                 gridIndices[i][j] = result.addVertex(tmp);
 
-                System.out.println("u: " + ((double) i) / steps + " v: " + ((double) j) / steps + " = " + tmp);
+//                System.out.println("u: " + ((double) i) / steps + " v: " + ((double) j) / steps + " = " + tmp);
             }
         }
 
         for (int u = 0; u < steps - 1; u++) {
             for (int v = 0; v < steps - 1; v++) {
-                result.addTriangle(gridIndices[u][v], gridIndices[u][v + 1], gridIndices[u + 1][v]);
-                result.addTriangle(gridIndices[u + 1][v], gridIndices[u][v + 1], gridIndices[u + 1][v + 1]);
+//                result.addTriangle(gridIndices[u][v], gridIndices[u][v + 1], gridIndices[u + 1][v]);
+//                result.addTriangle(gridIndices[u + 1][v], gridIndices[u][v + 1], gridIndices[u + 1][v + 1]);
+                result.addTriangle(gridIndices[u][v], gridIndices[u + 1][v],gridIndices[u][v + 1] );
+                result.addTriangle(gridIndices[u + 1][v],  gridIndices[u + 1][v + 1],gridIndices[u][v + 1]);
             }
         }
 
