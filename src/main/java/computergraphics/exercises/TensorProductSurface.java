@@ -4,48 +4,20 @@ package computergraphics.exercises;
 import computergraphics.datastructures.mesh.TriangleMesh;
 import computergraphics.math.Vector;
 
-import java.util.List;
-
 public class TensorProductSurface {
 
-    class Pair<T> {
-        public final T a;
-        public final T b;
+    private final Curve f;
+    private final Curve g;
+    private final Vector[][] controlPoints;
+    private final int degreeU;
+    private final int degreeV;
 
-        Pair(T a, T b) {
-            this.a = a;
-            this.b = b;
-        }
-    }
-
-
-    Curve f;
-    //	Curve g;
-    Vector[][] controlPoints;
-    int degreeU;
-    int degreeV;
-
-    public TensorProductSurface(Vector[][] controlPoints, int degreeU, int degreeV) {
+    public TensorProductSurface(Vector[][] controlPoints, int degreeU, int degreeV, Curve f, Curve g) {
         this.controlPoints = controlPoints;
         this.degreeU = degreeU;
         this.degreeV = degreeV;
-        f = new BezierCurve();
-//		g = new BezierCurve();
-//		
-//		for (int i = 0; i < degree+1; i++) {
-//			f.addcontrolPoints(controlPoints[0][i]);
-//			g.addcontrolPoints(controlPoints[1][i]);
-//		}
-    }
-
-    public TensorProductSurface(List<Vector> f, List<Vector> g) {
-        this.controlPoints = new Vector[2][f.size() > g.size() ? f.size() : g.size()];
-        for (int i = 0; i < f.size(); i++) {
-            this.controlPoints[0][i] = f.get(i);
-        }
-        for (int i = 0; i < g.size(); i++) {
-            this.controlPoints[1][i] = g.get(i);
-        }
+        this.f = f; // wird nur für basefunction gebraucht
+        this.g = g;
     }
 
     public Vector getValue(double u, double v) {
@@ -53,7 +25,7 @@ public class TensorProductSurface {
         for (int i = 0; i < degreeU; i++) {
             for (int j = 0; j < degreeV + 1; j++) {
                 Vector temp = controlPoints[i][j]; // c(ij)
-                temp = temp.multiply(f.baseFunction(u, i, degreeU)).multiply(f.baseFunction(v, j, degreeV)); // c * F * G
+                temp = temp.multiply(f.baseFunction(u, i, degreeU)).multiply(g.baseFunction(v, j, degreeV)); // c * F * G
                 result = result.add(temp);
             }
         }
@@ -86,32 +58,26 @@ public class TensorProductSurface {
         return result;
     }
 
-    public Vector getNormal(double u, double v){
-        Vector result = getTangent_U(u,v).cross(getTangent_V(u,v));
+    public Vector getNormal(double u, double v) {
+        Vector result = getTangent_U(u, v).cross(getTangent_V(u, v));
         result.normalize();
         return result;
     }
 
-    public TriangleMesh getTriangleMesh(int steps,Vector color) {
-//		Vector[][] grid = new Vector[steps][steps];
+    public TriangleMesh getTriangleMesh(int steps, Vector color) {
         Integer[][] gridIndices = new Integer[steps][steps];
         TriangleMesh result = new TriangleMesh(color);
         for (int i = 0; i < steps; i++) {
             for (int j = 0; j < steps; j++) {
-//				grid[i][j] = getValue(i/steps, j/steps);
                 Vector tmp = getValue(((double) i) / steps, ((double) j) / steps);
                 gridIndices[i][j] = result.addVertex(tmp);
-
-//                System.out.println("u: " + ((double) i) / steps + " v: " + ((double) j) / steps + " = " + tmp);
             }
         }
 
         for (int u = 0; u < steps - 1; u++) {
             for (int v = 0; v < steps - 1; v++) {
-//                result.addTriangle(gridIndices[u][v], gridIndices[u][v + 1], gridIndices[u + 1][v]);
-//                result.addTriangle(gridIndices[u + 1][v], gridIndices[u][v + 1], gridIndices[u + 1][v + 1]);
-                result.addTriangle(gridIndices[u][v], gridIndices[u + 1][v],gridIndices[u][v + 1] );
-                result.addTriangle(gridIndices[u + 1][v],  gridIndices[u + 1][v + 1],gridIndices[u][v + 1]);
+                result.addTriangle(gridIndices[u][v], gridIndices[u + 1][v], gridIndices[u][v + 1]);
+                result.addTriangle(gridIndices[u + 1][v], gridIndices[u + 1][v + 1], gridIndices[u][v + 1]);
             }
         }
 

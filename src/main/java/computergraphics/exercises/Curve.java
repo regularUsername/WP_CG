@@ -78,7 +78,6 @@ private List<Vector> controlPoints;
 			int size = getControlPoints().size();
 			for(int i = 0; i < size; i++){
 				Vector temp = getControlPoints().get(i);
-//			temp = temp.multiply(MathHelpers.over(getDegree(), i) * Math.pow(t, i) * Math.pow(1.0 - t, getDegree()-i));
 				temp = temp.multiply(baseFunction(t, i,getDegree()));
 				result = result.add(temp);
 			}
