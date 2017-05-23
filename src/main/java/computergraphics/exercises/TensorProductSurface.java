@@ -7,18 +7,20 @@ import java.util.List;
 import computergraphics.datastructures.mesh.TriangleMesh;
 import computergraphics.math.Vector;
 
-public class TensorProductSurfaces {
+public class TensorProductSurface {
 	
 	
-//	BezierCurve f;
-//	BezierCurve g;
+	Curve f;
+//	Curve g;
 	Vector[][] controlPoints;
-	int degree;
-	
-	public TensorProductSurfaces(Vector[][] controlPoints,int degree){
+	int degreeU;
+	int degreeV;
+
+	public TensorProductSurface(Vector[][] controlPoints, int degreeU, int degreeV){
 		this.controlPoints = controlPoints;
-		this.degree = degree;
-//		f = new BezierCurve();
+		this.degreeU = degreeU;
+		this.degreeV = degreeV;
+		f = new BezierCurve();
 //		g = new BezierCurve();
 //		
 //		for (int i = 0; i < degree+1; i++) {
@@ -27,7 +29,7 @@ public class TensorProductSurfaces {
 //		}
 	}
 	
-	public TensorProductSurfaces(List<Vector> f, List<Vector> g){
+	public TensorProductSurface(List<Vector> f, List<Vector> g){
 		this.controlPoints = new Vector[2][f.size() > g.size()? f.size():g.size()];
 		for (int i = 0; i < f.size(); i++) {
 			this.controlPoints[0][i] = f.get(i);
@@ -39,17 +41,17 @@ public class TensorProductSurfaces {
 	
 	public Vector getValue(double u,double v){
 		Vector result = new Vector(3);
-		for (int i = 0; i < 2; i++) {
-			for (int j = 0; j < degree+1; j++) {
+		for (int i = 0; i < degreeU; i++) {
+			for (int j = 0; j < degreeV+1; j++) {
 					Vector temp = controlPoints[i][j]; // c(ij)
-					temp = temp.multiply(BezierCurve.baseFunction(u, i,degree)).multiply(BezierCurve.baseFunction(v, j,degree)); // c * F * G
+					temp = temp.multiply(f.baseFunction(u, i,degreeU)).multiply(f.baseFunction(v, j,degreeV)); // c * F * G
 					result = result.add(temp);
 			}
 		}
 		return result;
 	}
 
-	public Vector getTangent_U(double v){
+	public Vector getTangent(double u,double v){
 		Vector result = new Vector(3);
 		//for ()
 		//TO-DO
@@ -59,12 +61,7 @@ public class TensorProductSurfaces {
 		return null;
 		
 	}
-	
-	public Vector getTangent_V(double u){
-		
-		return null;
-		
-	}
+
 	public TriangleMesh getTriangleMesh(int steps){
 //		Vector[][] grid = new Vector[steps][steps];
 		Integer[][] gridIndices = new Integer[steps][steps];

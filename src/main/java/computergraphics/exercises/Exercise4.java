@@ -5,13 +5,10 @@ import com.jogamp.opengl.GL2;
 import computergraphics.math.Vector;
 import computergraphics.misc.Scene;
 import computergraphics.rendering.Shader;
-import computergraphics.rendering.Shader.ShaderMode;
 import computergraphics.scenegraph.INode;
-import computergraphics.scenegraph.PlaneNode;
 import computergraphics.scenegraph.SphereNode;
 import computergraphics.scenegraph.TranslationNode;
 import computergraphics.scenegraph.TriangleMeshNode;
-import computergraphics.scenegraph.INode.RenderMode;
 
 public class Exercise4 extends Scene{
 
@@ -47,18 +44,28 @@ public class Exercise4 extends Scene{
 //        planeTranslation.addChild(planeNode);
 //        getRoot().addChild(planeTranslation);
         
-        Vector[][] grid = new Vector[2][4];
-        grid[0][0] = new Vector(0,0,0); // startpunkt
-        grid[0][1] = new Vector(1,0,1); // tangente start
-        grid[0][2] = new Vector(1,0,1); // tangente ende
-        grid[0][3] = new Vector(3,0,0); // endpunkt
+        Vector[][] grid = new Vector[4][4];
+        grid[0][0] = new Vector(0,3,0); // startpunkt
+        grid[0][1] = new Vector(1,3,1); // tangente start
+        grid[0][2] = new Vector(2,3,0); // tangente ende
+        grid[0][3] = new Vector(3,3,0); // endpunkt
         
-        grid[1][0] = new Vector(0,0,0);
-        grid[1][1] = new Vector(0,1,1);
+        grid[1][0] = new Vector(0,2,0);
+        grid[1][1] = new Vector(1,2,-2);
         grid[1][2] = new Vector(0,1,1);
-        grid[1][3] = new Vector(0,3,0);
-        TensorProductSurfaces tensorProductSurfaces = new TensorProductSurfaces(grid,3);
-        TriangleMeshNode triangleMeshNode = new TriangleMeshNode(tensorProductSurfaces.getTriangleMesh(10));
+        grid[1][3] = new Vector(2,2,2);
+
+        grid[2][0] = new Vector(0,1,0);
+        grid[2][1] = new Vector(1,1,1);
+        grid[2][2] = new Vector(2,1,4);
+        grid[2][3] = new Vector(3,1,0);
+
+        grid[3][0] = new Vector(0,0,0);
+        grid[3][1] = new Vector(1,0,0);
+        grid[3][2] = new Vector(2,0,0);
+        grid[3][3] = new Vector(3,0,0);
+        TensorProductSurface tensorProductSurface = new TensorProductSurface(grid,3,3);
+        TriangleMeshNode triangleMeshNode = new TriangleMeshNode(tensorProductSurface.getTriangleMesh(10));
         getRoot().addChild(triangleMeshNode);
 
         

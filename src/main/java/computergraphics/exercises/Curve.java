@@ -24,7 +24,7 @@ private List<Vector> controlPoints;
 		
 		/**
 		 * TODO
-		 * @param controlPoints
+		 * @param controlPoint
 		 */
 		public void deleteControlPoints(Vector controlPoint){
 			controlPoints.remove(controlPoint);
@@ -39,7 +39,7 @@ private List<Vector> controlPoints;
 		}
 		
 		/**
-		 * @param controlPointList
+		 * @param controlPointsList
 		 */
 		public void addcontrolPoints(List<Vector> controlPointsList){
 			controlPoints.addAll(controlPointsList);
@@ -70,18 +70,38 @@ private List<Vector> controlPoints;
 		
 		/**
 		 * curve value at position t
-		 * @param p
+		 * @param t
 		 * @return
 		 */
-		public abstract Vector getValue(double t);
-		
+		public Vector getValue(double t) {
+			Vector result = new Vector(3);
+			int size = getControlPoints().size();
+			for(int i = 0; i < size; i++){
+				Vector temp = getControlPoints().get(i);
+//			temp = temp.multiply(MathHelpers.over(getDegree(), i) * Math.pow(t, i) * Math.pow(1.0 - t, getDegree()-i));
+				temp = temp.multiply(baseFunction(t, i,getDegree()));
+				result = result.add(temp);
+			}
+
+			return result;
+		}
+
+		public abstract double baseFunction(double t, int i, int degree);
 		
 		/**
 		 * tangent at position t
-		 * @param controlPoints
+		 * @param t
 		 * @return
 		 */
-		public abstract Vector calculateTangent(double t);
+        public Vector calculateTangent(double t) {
+            final double d = 0.001;
+            double t1 = t+ d;
+
+            Vector point0 = getValue(t);
+            Vector point1 = getValue(t1);
+
+            return point1.subtract(point0).multiply(1/d);
+        }
 		
 		
 	
