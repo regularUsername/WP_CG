@@ -25,13 +25,15 @@ public class Exercise4 extends Scene{
 	private static final long serialVersionUID = -3701527599796171631L;
 
 	private double u,v;
-	private LineNode lineNode;
+	private LineNode tpsNormal;
+	private LineNode tpsTangentU;
+	private LineNode tpsTangentV;
 
 	
 	@Override
 	public void setupScenegraph(GL2 gl) {
 		 // Setup scene after OpenGL is ready
-        getRoot().setLightPosition(new Vector(1, 1, 1));
+        getRoot().setLightPosition(new Vector(1, 1, 2));
         getRoot().setAnimated(true);
 
 
@@ -73,12 +75,22 @@ public class Exercise4 extends Scene{
         v = 0.5;
         Vector surfacePoint = tensorProductSurface.getValue(u,v);
         Vector surfaceNormal = tensorProductSurface.getNormal(u,v);
+        Vector surfaceTangentU = tensorProductSurface.getTangent_U(u,v);
+        Vector surfaceTangentV = tensorProductSurface.getTangent_V(u,v);
         System.out.println(surfacePoint+"   "+surfaceNormal);
-        lineNode = new LineNode(surfacePoint,surfacePoint.add(surfaceNormal));
-        getRoot().addChild(lineNode);
+        tpsNormal = new LineNode(surfacePoint,surfacePoint.add(surfaceNormal),new Vector(0,1,0,1));
+        tpsTangentU = new LineNode(surfacePoint.subtract(surfaceTangentU),surfacePoint.add(surfaceTangentU),new Vector(0,0,1,1));
+        tpsTangentV = new LineNode(surfacePoint.subtract(surfaceTangentV),surfacePoint.add(surfaceTangentV),new Vector(1,0,0,1));
 
-        TriangleMeshNode triangleMeshNode = new TriangleMeshNode(tensorProductSurface.getTriangleMesh(10));
-        getRoot().addChild(triangleMeshNode);
+        TranslationNode tpsTranslation = new TranslationNode(new Vector(-1,-1,0));
+        tpsTranslation.addChild(tpsNormal);
+        tpsTranslation.addChild(tpsTangentV);
+        tpsTranslation.addChild(tpsTangentU);
+
+        TriangleMeshNode triangleMeshNode = new TriangleMeshNode(tensorProductSurface.getTriangleMesh(10,new Vector(0.7,0.7,0.7,1)));
+        tpsTranslation.addChild(triangleMeshNode);
+
+        getRoot().addChild(tpsTranslation);
 
         
 	}
@@ -88,43 +100,44 @@ public class Exercise4 extends Scene{
     public void keyPressed(KeyEvent keyEvent){
 	    double d = 0.05;
 	    switch(keyEvent.getKeyChar()){
-            case 'a':
-                System.out.println("pressed u -"+d);
+            case 'w':
                 u-=d;
+                if(u<0){
+                    u=0;
+                }
+                break;
+            case 'a':
+                v-=d;
+                if(v<0){
+                    v=0;
+                }
                 break;
             case 's':
-                System.out.println("pressed v -"+d);
-                v-=d;
+                u+=d;
+                if(u>1){
+                    u=1;
+                }
                 break;
             case 'd':
-                System.out.println("pressed u +"+d);
-                u+=d;
-                break;
-            case 'w':
-                System.out.println("pressed v +"+d);
                 v+=d;
+                if(v>1){
+                    v=1;
+                }
                 break;
             default:
                 break;
         }
 
-        if(v>1){
-	        v=1;
-        }
-        if(v<0){
-            v=0;
-        }
-        if(u>1){
-            u=1;
-        }
-        if(u<0){
-            u=0;
-        }
 
         Vector surfacePoint = tensorProductSurface.getValue(u,v);
         Vector surfaceNormal = tensorProductSurface.getNormal(u,v);
-        System.out.println(surfacePoint+"   "+surfaceNormal);
-        lineNode.setVecs(surfacePoint,surfacePoint.add(surfaceNormal));
+        Vector surfaceTangentU = tensorProductSurface.getTangent_U(u,v);
+        Vector surfaceTangentV = tensorProductSurface.getTangent_V(u,v);
+
+        tpsNormal.setVecs(surfacePoint,surfacePoint.add(surfaceNormal));
+        tpsTangentU.setVecs(surfacePoint.subtract(surfaceTangentU),surfacePoint.add(surfaceTangentU));
+        tpsTangentV.setVecs(surfacePoint.subtract(surfaceTangentV),surfacePoint.add(surfaceTangentV));
+
     }
 
 	/**

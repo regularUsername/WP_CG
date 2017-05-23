@@ -62,24 +62,28 @@ public class TensorProductSurface {
 
     public Vector getTangent_U(double u, double v) {
         final Double d = 0.0001;
-        Vector result = new Vector(3);
 
 
         Vector point0 = getValue(u, v);
         Vector point1 = getValue(u + d, v);
 
-        return point1.subtract(point0).multiply(1 / d);
+        Vector result = point1.subtract(point0).multiply(1 / d);
+        result.normalize();
+
+        return result;
     }
 
     public Vector getTangent_V(double u, double v) {
         final Double d = 0.0001;
-        Vector result = new Vector(3);
 
 
         Vector point0 = getValue(u, v);
         Vector point1 = getValue(u, v + d);
 
-        return point1.subtract(point0).multiply(1 / d);
+        Vector result = point1.subtract(point0).multiply(1 / d);
+        result.normalize();
+
+        return result;
     }
 
     public Vector getNormal(double u, double v){
@@ -88,10 +92,10 @@ public class TensorProductSurface {
         return result;
     }
 
-    public TriangleMesh getTriangleMesh(int steps) {
+    public TriangleMesh getTriangleMesh(int steps,Vector color) {
 //		Vector[][] grid = new Vector[steps][steps];
         Integer[][] gridIndices = new Integer[steps][steps];
-        TriangleMesh result = new TriangleMesh(new Vector(1, 0, 0, 1));
+        TriangleMesh result = new TriangleMesh(color);
         for (int i = 0; i < steps; i++) {
             for (int j = 0; j < steps; j++) {
 //				grid[i][j] = getValue(i/steps, j/steps);
