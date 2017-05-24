@@ -55,21 +55,23 @@ public class Exercise4 extends Scene{
         grid[0][1] = new Vector(1,3,1);
         grid[0][2] = new Vector(2,3,0);
         grid[0][3] = new Vector(3,3,0);
-        
-        grid[1][0] = new Vector(0,2,0);
-        grid[1][1] = new Vector(1,2,-2);
-        grid[1][2] = new Vector(0,1,1);
-        grid[1][3] = new Vector(2,2,2);
 
-        grid[2][0] = new Vector(0,1,0);
-        grid[2][1] = new Vector(1,1,1);
-        grid[2][2] = new Vector(2,1,4);
-        grid[2][3] = new Vector(3,1,0);
+        grid[1][0] = new Vector(0,0,0);
+        grid[1][1] = new Vector(1,0,0);
+        grid[1][2] = new Vector(2,0,0);
+        grid[1][3] = new Vector(3,0,0);
 
-        grid[3][0] = new Vector(0,0,0);
-        grid[3][1] = new Vector(1,0,0);
-        grid[3][2] = new Vector(2,0,0);
-        grid[3][3] = new Vector(3,0,0);
+        grid[2][0] = new Vector(0,2,0);
+        grid[2][1] = new Vector(1,2,-2);
+        grid[2][2] = new Vector(0,1,1);
+        grid[2][3] = new Vector(2,2,2);
+
+        grid[3][0] = new Vector(0,1,0);
+        grid[3][1] = new Vector(1,1,1);
+        grid[3][2] = new Vector(2,1,4);
+        grid[3][3] = new Vector(3,1,0);
+
+
         tensorProductSurface = new TensorProductSurface(grid,3,3,new BezierCurve(), new BezierCurve());
 
         Vector surfacePoint = tensorProductSurface.getValue(u,v);
@@ -77,9 +79,10 @@ public class Exercise4 extends Scene{
         Vector surfaceTangentU = tensorProductSurface.getTangent_U(u,v);
         Vector surfaceTangentV = tensorProductSurface.getTangent_V(u,v);
         System.out.println(surfacePoint+"   "+surfaceNormal);
-        tpsNormal = new LineNode(surfacePoint,surfacePoint.add(surfaceNormal),new Vector(0,1,0,1));
-        tpsTangentU = new LineNode(surfacePoint.subtract(surfaceTangentU),surfacePoint.add(surfaceTangentU),new Vector(0,0,1,1));
-        tpsTangentV = new LineNode(surfacePoint.subtract(surfaceTangentV),surfacePoint.add(surfaceTangentV),new Vector(1,0,0,1));
+        float lineWidth = 4.0f;
+        tpsNormal = new LineNode(surfacePoint,surfacePoint.add(surfaceNormal),lineWidth,new Vector(0,1,0,1));
+        tpsTangentU = new LineNode(surfacePoint.subtract(surfaceTangentU),surfacePoint.add(surfaceTangentU),lineWidth,new Vector(0,0,1,1));
+        tpsTangentV = new LineNode(surfacePoint.subtract(surfaceTangentV),surfacePoint.add(surfaceTangentV),lineWidth,new Vector(1,0,0,1));
 
         TranslationNode tpsTranslation = new TranslationNode(new Vector(-1,-1,0));
         tpsTranslation.addChild(tpsNormal);
