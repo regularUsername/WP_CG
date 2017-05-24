@@ -20,7 +20,6 @@ public class Exercise4 extends Scene{
 		super(100, Shader.ShaderMode.PHONG, INode.RenderMode.REGULAR);
 		u = 0.5;
 		v = 0.5;
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -48,7 +47,10 @@ public class Exercise4 extends Scene{
         lightTranslation.addChild(lightSphereNode);
         getRoot().addChild(lightTranslation);
 
-        Vector[][] grid = new Vector[4][4];
+
+        int degreeU = 3;
+        int degreeV = 3;
+        Vector[][] grid = new Vector[degreeU+1][degreeV+1];
         grid[0][0] = new Vector(0,3,0);
         grid[0][1] = new Vector(1,3,1);
         grid[0][2] = new Vector(2,3,0);

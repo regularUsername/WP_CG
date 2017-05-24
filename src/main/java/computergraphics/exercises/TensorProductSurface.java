@@ -81,6 +81,8 @@ public class TensorProductSurface {
             }
         }
 
+        result.computeTriangleNormals();
+
         return result;
     }
 }
