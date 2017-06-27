@@ -25,9 +25,11 @@ public class Exercise7 extends Scene {
     private static final long serialVersionUID = 8141036480333465137L;
 
 
-    private final double stepSize = 5;
+    private final double stepSize = 0.1;
 
     private RobotArm robotArm;
+
+    double x, y, z;
 
     public Exercise7() {
         // Timer timeout and shader mode (PHONG, TEXTURE, NO_LIGHTING)
@@ -35,8 +37,10 @@ public class Exercise7 extends Scene {
 
 
         robotArm = new RobotArm();
+        x = 0;
+        y = 0;
+        z = 1;
     }
-
 
 
     @Override
@@ -53,16 +57,16 @@ public class Exercise7 extends Scene {
         lightTranslation.addChild(lightSphereNode);
         getRoot().addChild(lightTranslation);
 
-		// Plane
-		TranslationNode planeTranslation = new TranslationNode(new Vector(0,0,-0.1));
-		PlaneNode planeNode = new PlaneNode(5);
-		planeTranslation.addChild(planeNode);
-		getRoot().addChild(planeTranslation);
+        // Plane
+        TranslationNode planeTranslation = new TranslationNode(new Vector(0, 0, -0.1));
+        PlaneNode planeNode = new PlaneNode(5);
+        planeTranslation.addChild(planeNode);
+        getRoot().addChild(planeTranslation);
 
 
         getRoot().addChild(robotArm);
 
-		getRoot().addChild(new CrossNode(2,1,false));
+        getRoot().addChild(new CrossNode(2, 1, false));
 
 
     }
@@ -74,28 +78,35 @@ public class Exercise7 extends Scene {
         // nur zum testen der visualisierung später wird hier die ziel position verändert
         switch (c) {
             case 'w':
-                robotArm.setB(robotArm.getB()-stepSize);
+//                robotArm.setBeta(robotArm.getBeta()-stepSize);
+                y += stepSize;
                 break;
             case 'a':
-                robotArm.setY(robotArm.getY()-stepSize);
+                x -= stepSize;
+//                robotArm.setGamma(robotArm.getGamma()-stepSize);
                 break;
             case 's':
-                robotArm.setB(robotArm.getB()+stepSize);
+//                robotArm.setBeta(robotArm.getBeta()+stepSize);
+                y -= stepSize;
                 break;
             case 'd':
-                robotArm.setY(robotArm.getY()+stepSize);
+                x += stepSize;
+//                robotArm.setGamma(robotArm.getGamma()+stepSize);
                 break;
 
             case 'r':
-                robotArm.setA(robotArm.getA()-stepSize);
+                z += stepSize;
+//                robotArm.setAlpha(robotArm.getAlpha()-stepSize);
                 break;
             case 'f':
-                robotArm.setA(robotArm.getA()+stepSize);
+                z -= stepSize;
+//                robotArm.setAlpha(robotArm.getAlpha()+stepSize);
                 break;
             default:
                 System.out.println("keyPressed: " + c);
                 break;
         }
+        robotArm.setTargetIK(new Vector(x, y, z));
     }
 
     @Override
