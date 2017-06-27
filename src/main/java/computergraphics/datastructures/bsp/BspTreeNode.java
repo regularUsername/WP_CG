@@ -49,7 +49,7 @@ public class BspTreeNode {
    * otherwise.
    */
   public boolean IsPositive(Vector p) {
-    return this.p.multiply(n) - p.multiply(n) > 0;
+    return this.p.multiply(n) - p.multiply(n) < 0;
   }
 
   public void SetChild(Orientation orientation, BspTreeNode childNode) {

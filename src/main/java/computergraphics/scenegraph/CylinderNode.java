@@ -72,6 +72,7 @@ public class CylinderNode extends LeafNode {
         vbo.Setup(renderVertices, GL2.GL_TRIANGLE_STRIP);
     }
 
+
     private void createVboTriangles() {
         List<RenderVertex> renderVertices = new ArrayList<>();
 
@@ -90,9 +91,9 @@ public class CylinderNode extends LeafNode {
             Vector normal = new Vector(Math.cos(tn),Math.sin(tn), 0.0);
             
             // TODO wie macht man hier die normal vektoren ?
-            renderVertices.add(new RenderVertex(new Vector(0.0, 0.0, length), nTop, color));
-            renderVertices.add(new RenderVertex(new Vector(x0, y0, length), nTop, color));
-            renderVertices.add(new RenderVertex(new Vector(x1, y1, length), nTop, color));
+            renderVertices.add(new RenderVertex(new Vector(0.0, 0.0, length), nBot, color));
+            renderVertices.add(new RenderVertex(new Vector(x0, y0, length), nBot, color));
+            renderVertices.add(new RenderVertex(new Vector(x1, y1, length), nBot, color));
 
             renderVertices.add(new RenderVertex(new Vector(x1, y1, length), normal, color));
             renderVertices.add(new RenderVertex(new Vector(x0, y0, length), normal, color));
@@ -102,9 +103,9 @@ public class CylinderNode extends LeafNode {
             renderVertices.add(new RenderVertex(new Vector(x0, y0, -length), normal, color));
             renderVertices.add(new RenderVertex(new Vector(x1, y1, -length), normal, color));
 
-            renderVertices.add(new RenderVertex(new Vector(x0, y0, -length), nBot, color));
-            renderVertices.add(new RenderVertex(new Vector(0.0, 0.0, -length), nBot, color));
-            renderVertices.add(new RenderVertex(new Vector(x1, y1, -length), nBot, color));
+            renderVertices.add(new RenderVertex(new Vector(x0, y0, -length), nTop, color));
+            renderVertices.add(new RenderVertex(new Vector(0.0, 0.0, -length), nTop, color));
+            renderVertices.add(new RenderVertex(new Vector(x1, y1, -length), nTop, color));
         }
         vbo.Setup(renderVertices, GL2.GL_TRIANGLES);
     }
