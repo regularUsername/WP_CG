@@ -91,8 +91,8 @@ public class RobotArm extends InnerNode {
 
         // größenordnungen stimmen hier noch nicht s=0.1 ist viel zu klein und mit epsilon=1e-5 bricht er zu früh ab
         final double h = 1e-4;
-        final double s = 1;
-        final double epsilon = 1e-7;
+        final double s = 0.1;
+        final double epsilon = 1e-5;
 
         double alpha = this.alpha;
         double beta = this.beta;
@@ -107,14 +107,16 @@ public class RobotArm extends InnerNode {
 
             Vector gradient_f = new Vector(partial_alpha,partial_beta,partial_gamma);
 
-            Vector s_times_gradient_f = gradient_f.multiply(s);
+            gradient_f.normalize(); // ist wohl nötig sonst macht stepsize s keinen sinn
 
-            alpha -= s_times_gradient_f.x();
-            beta -= s_times_gradient_f.y();
-            gamma -= s_times_gradient_f.z();
+            gradient_f.multiplySelf(s);
+
+            alpha -= gradient_f.x();
+            beta -= gradient_f.y();
+            gamma -= gradient_f.z();
 
             double newDistance = errorFunction(getFingertipPos(alpha,beta,gamma),targetPos);
-            if ((Math.abs(distance-newDistance) < epsilon)){
+            if (((distance-newDistance) < epsilon)){
                 break;
             }
 
